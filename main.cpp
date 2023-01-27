@@ -57,7 +57,7 @@ using namespace std;
 // leetcode
 class Solution {
   public:
-    string longestCommonPrefix(vector<string> &strs) {
+    string longestCommonPrefix(vector<string>& strs) {
         int ans = 0;
         for (int j = 0; j < strs[0].size(); j++, ans++) {
             char common = strs[0][ans];
@@ -70,7 +70,7 @@ class Solution {
     }
 
     // noice
-    int removeDuplicates(vector<int> &nums) {
+    int removeDuplicates(vector<int>& nums) {
         int at = 0;
         for (int i = 0; i < nums.size(); i++) {
             if (nums[at] != nums[i]) {
@@ -81,7 +81,7 @@ class Solution {
     }
 
     // wtf I could use the above directly
-    int removeElement(vector<int> &nums, int val) {
+    int removeElement(vector<int>& nums, int val) {
         int i = 0, j = nums.size() - 1;
         while (i <= j) {
             while (nums[i] != val && i < nums.size() - 1)
@@ -97,7 +97,7 @@ class Solution {
     }
 
     // What a terrible solution I just wrote ewwwwww
-    int searchInsert(vector<int> &nums, int target) {
+    int searchInsert(vector<int>& nums, int target) {
         int incr = nums.size() / 2, i = 0;
         while (incr != 0) {
             if (nums[i] == target)
@@ -122,7 +122,7 @@ class Solution {
     }
 
     // me after studying dd
-    vector<int> plusOne(vector<int> &digits) {
+    vector<int> plusOne(vector<int>& digits) {
         int carry = 1;
         for (int i = digits.size() - 1; i >= 0; i--) {
             if (digits[i] + carry == 10) {
@@ -138,13 +138,70 @@ class Solution {
         }
         return digits;
     }
+
+    // noicee
+    string addBinary(string a, string b) {
+        int i = a.size() - 1, j = b.size() - 1, carry = 0;
+        string ans = "";
+        while (carry != 0 || i >= 0 || j >= 0) {
+            int first = i < 0 || a[i] == '0' ? 0 : 1;
+            int second = j < 0 || b[j] == '0' ? 0 : 1;
+            int t = first + second + carry;
+            carry = (t > 1) ? 1 : 0;
+            ans.insert(ans.begin(), t % 2 + 48);
+            i--;
+            j--;
+        }
+        return ans;
+    }
+
+    // brrrr usee newton's methood
+    int mySqrt(int x) {
+        int h = min(x / 2, 46340), l = 1, m = 1;
+        while (l <= h) {
+            m = (l + h) / 2;
+            if (m * m > x)
+                h = m - 1;
+            else if (m * m < x)
+                l = m + 1;
+            else
+                return m;
+        }
+        return (m * m > x) ? m - 1 : m;
+    }
+
+    // nice
+    bool isPalindrome(string s) {
+        int i = 0, j = s.size() - 1;
+        while (i < j) {
+            while (i < j && !isalnum(s[i]))
+                i++;
+            while (j > 0 && !isalnum(s[j]))
+                j--;
+            if (isalnum(s[i]) && isalnum(s[j]) &&
+                tolower(s[i]) != tolower(s[j]))
+                return false;
+            i++;
+            j--;
+        }
+        return true;
+    }
+
+    // old...
+    int singleNumber(vector<int>& nums) {
+        int ans = nums[0];
+        for (int i = 1; i < nums.size(); i++)
+            ans ^= nums[i];
+        return ans;
+    }
 };
 
 int main() {
     vector<int> v = {9, 9, 9, 9};
     Solution s;
-    auto output = s.plusOne(v);
-    for (auto &&i : output) {
-        cout << i << "\n";
-    }
+    auto output = s.isPalindrome("");
+    cout << output << endl;
+    // for (auto &&i : output) {
+    //     cout << i << "\n";
+    // }
 }

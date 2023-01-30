@@ -59,6 +59,7 @@ struct ListNode {
     ListNode* next;
     ListNode() : val(0), next(nullptr) {}
     ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode* n) : val(x), next(n) {}
 };
 
 class Solution {
@@ -71,6 +72,37 @@ class Solution {
             else
                 ptr = ptr->next;
         }
+        return head;
     }
-    bool hasCycle(ListNode* head) {}
+
+    // bad O(n^2)
+    bool _hasCycle(ListNode* head) {
+        unordered_set<ListNode*> addresses;
+        ListNode* ptr = head;
+        while (ptr) {
+            if (addresses.find(ptr) != addresses.end())
+                return true;
+            addresses.insert(ptr);
+            ptr = ptr->next;
+        }
+        return false;
+    }
+
+    // Floyd's cycle algorithm
+    bool hasCycle(ListNode* head) {
+        ListNode *slow = head, *fast = head;
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
+            if (slow == fast)
+                return true;
+        }
+        return false;
+    }
 };
+
+int main() {
+    Solution s;
+    ListNode l(3, new ListNode(2, &l));
+    cout << s.hasCycle(&l) << endl;
+}

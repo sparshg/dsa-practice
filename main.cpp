@@ -194,14 +194,93 @@ class Solution {
             ans ^= nums[i];
         return ans;
     }
+
+    // should be count += ((n << 1) & 1)..
+    int hammingWeight(uint32_t n) {
+        int count = 0;
+        while (n != 0) {
+            count += n % 2;
+            n /= 2;
+        }
+        return count;
+    }
+
+    // pascal's triangle
+    vector<vector<int>> generate(int numRows) {
+        vector<vector<int>> res = {{1}};
+        if (numRows > 1)
+            res.push_back({1, 1});
+        for (int i = 1; i < numRows - 1; i++) {
+            vector<int> t = {1};
+            for (int j = 0; j < i; j++) {
+                t.push_back(res[i][j] + res[i][j + 1]);
+            }
+            t.push_back(1);
+            res.push_back(t);
+        }
+
+        return res;
+    }
+
+    // pascal's triangle
+    vector<int> getRow(int rowIndex) {
+        vector<int> t = {1};
+        for (int i = 1; i <= rowIndex / 2; i++) {
+            long int temp = 1;
+            for (int k = rowIndex; k > rowIndex - i; k--)
+                temp *= k;
+            for (int k = 2; k <= i; k++)
+                temp /= k;
+            t.push_back(temp);
+        }
+        for (int i = t.size() - ((rowIndex & 1) ? 1 : 2); i >= 0; i--) {
+            t.push_back(t[i]);
+        }
+        return t;
+    }
+
+    // parentheses
+    bool isValid(string s) {
+        stack<char> mem;
+        for (int i = 0; i < s.size(); i++) {
+            if (s[i] == '(' || s[i] == '[' || s[i] == '{')
+                mem.push(s[i]);
+            else {
+                if (mem.empty() || s[i] == ')' && mem.top() != '(' ||
+                    s[i] == ']' && mem.top() != '[' ||
+                    s[i] == '}' && mem.top() != '{')
+                    return false;
+                mem.pop();
+            }
+        }
+        return mem.empty();
+    }
+
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        if (n == 0)
+            return;
+        int a = m - 1, b = n - 1;
+        for (int i = m + n - 1; i >= 0; i--) {
+            if (b < 0 || a >= 0 && (nums1[a] > nums2[b])) {
+                nums1[i] = nums1[a--];
+            } else {
+                nums1[i] = nums2[b--];
+            }
+        }
+    }
 };
 
 int main() {
-    vector<int> v = {9, 9, 9, 9};
+    vector<int> v = {0};
+    vector<int> v2 = {1};
     Solution s;
-    auto output = s.isPalindrome("");
-    cout << output << endl;
-    // for (auto &&i : output) {
-    //     cout << i << "\n";
+    s.merge(v, 0, v2, 1);
+    auto output = v;
+    for (auto&& i : output)
+        cout << i << endl;
+    // for (auto&& j : i) {
+    //     cout << j << " ";
+    // }
+    // cout << i << "\n";
     // }
 }

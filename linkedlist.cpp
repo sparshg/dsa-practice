@@ -75,6 +75,17 @@ class Solution {
         return head;
     }
 
+    ListNode* reverseList(ListNode* head) {
+        ListNode* p1 = nullptr;
+        while (head) {
+            ListNode* p3 = head->next;
+            head->next = p1;
+            p1 = head;
+            head = p3;
+        }
+        return p1;
+    }
+
     // bad O(n^2)
     bool _hasCycle(ListNode* head) {
         unordered_set<ListNode*> addresses;
@@ -98,6 +109,40 @@ class Solution {
                 return true;
         }
         return false;
+    }
+
+    ListNode* removeElements(ListNode* head, int val) {
+        while (head && head->val == val)
+            head = head->next;
+        ListNode* ptr = head;
+        ListNode* prev = nullptr;
+        while (ptr) {
+            if (prev && ptr->val == val)
+                prev->next = ptr->next;
+            else
+                prev = ptr;
+            ptr = ptr->next;
+        }
+        return head;
+    }
+
+    ListNode* getIntersectionNode(ListNode* headA, ListNode* headB) {
+        ListNode *ptr1 = headA, *ptr2 = headB;
+        for (int i = 0; i < 2; i++) {
+            while (ptr1 && ptr2) {
+                ptr1 = ptr1->next;
+                ptr2 = ptr2->next;
+            }
+            if (!ptr1)
+                ptr1 = headB;
+            else
+                ptr2 = headA;
+        }
+        while (ptr1 != ptr2) {
+            ptr1 = ptr1->next;
+            ptr2 = ptr2->next;
+        }
+        return ptr1;
     }
 };
 

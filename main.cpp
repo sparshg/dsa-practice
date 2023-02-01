@@ -268,16 +268,114 @@ class Solution {
             }
         }
     }
+
+    int findDuplicate(vector<int>& nums) {
+        int i = 0, mem = 0;
+        while (nums[i] != 0) {
+            mem = nums[i];
+            nums[i] = 0;
+            i = mem;
+        }
+        return mem;
+    }
+
+    bool containsDuplicate(vector<int>& nums) {
+        unordered_map<int, int> m;
+        for (int i = 0; i < nums.size(); i++) {
+            if (m[nums[i]] > 1)
+                return true;
+            m[nums[i]]++;
+        }
+        return false;
+    }
+
+    bool isIsomorphic(string s, string t) {
+        unordered_map<char, char> m1, m2;
+        for (int i = 0; i < s.size(); i++) {
+            m1[s[i]] = t[i];
+            m2[t[i]] = s[i];
+        }
+        for (int i = 0; i < s.size(); i++) {
+            if (m1[s[i]] != t[i] || m2[t[i]] != s[i])
+                return false;
+        }
+        return true;
+    }
+
+    // can be done just with bit manipulation...
+    uint32_t reverseBits(uint32_t n) {
+        uint32_t t = 0, c = 0;
+        while (n != 0) {
+            t = (t * 2) + (n % 2);
+            n /= 2;
+            c++;
+        }
+        for (int i = 0; i < 32 - c; i++)
+            t <<= 1;
+        return t;
+    }
+
+    vector<string> summaryRanges(vector<int>& nums) {
+        vector<string> ans;
+        int start = 0;
+        for (int i = 1; i <= nums.size(); i++) {
+            if (i == nums.size() || nums[i] - i != nums[start] - start) {
+                (start == i - 1) ? ans.push_back(to_string(nums[start]))
+                                 : ans.push_back(to_string(nums[start]) + "->" +
+                                                 to_string(nums[i - 1]));
+                start = i;
+            }
+        }
+        return ans;
+    }
+
+    // copied...
+    bool isPowerOfTwo(int n) { return (n > 0 && !(n & (n - 1))); }
+
+    bool isAnagram(string s, string t) {
+        if (s.size() != t.size())
+            return false;
+        int count[26] = {0};
+        for (int i = 0; i < s.size(); i++) {
+            count[s[i] - 97]++;
+            count[t[i] - 97]--;
+        }
+        for (int i = 0; i < 26; i++)
+            if (count[i])
+                return false;
+        return true;
+    }
+
+    int missingNumber(vector<int>& nums) {
+        int ans = 0;
+        for (int i = 1; i <= nums.size(); i++) {
+            ans ^= nums[i - 1] ^ i;
+        }
+        return ans;
+    }
+
+    void reverseString(vector<char>& s) {
+        for (int i = 0; i < s.size() / 2; i++)
+            swap(s[i], s[s.size() - i - 1]);
+    }
+
+    // woow.. n & (n - 1) : first set bit turned off
+    vector<int> countBits(int n) {
+        vector<int> ans(n + 1);
+        for (int i = 1; i <= n; i++)
+            ans[i] = ans[i & (i - 1)] + 1;
+        return ans;
+    }
 };
 
 int main() {
-    vector<int> v = {0};
+    vector<int> v = {0, 1, 2, 4, 5, 7};
     vector<int> v2 = {1};
     Solution s;
-    s.merge(v, 0, v2, 1);
-    auto output = v;
-    for (auto&& i : output)
-        cout << i << endl;
+    auto output = s.addDigits(38);
+    cout << output << endl;
+    // for (auto&& i : output)
+    //     cout << i << endl;
     // for (auto&& j : i) {
     //     cout << j << " ";
     // }
